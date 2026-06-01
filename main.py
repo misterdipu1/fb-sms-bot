@@ -7,7 +7,7 @@ from flask import Flask
 from telebot import types
 from datetime import datetime, timedelta
 
-# ==================== KEEP ALIVE SERVER (FOR RENDER) ====================
+# ==================== KEEP ALIVE SERVER ====================
 app = Flask('')
 
 @app.route('/')
@@ -15,7 +15,10 @@ def home():
     return "<b>Premium Facebook Bot is Online!</b>"
 
 def run_web_server():
-    app.run(host='0.0.0.0', port=8080)
+    try:
+        app.run(host='0.0.0.0', port=8080)
+    except Exception as e:
+        print(f"Web Server Error: {e}")
 
 def keep_alive():
     t = threading.Thread(target=run_web_server)
@@ -38,7 +41,6 @@ session = requests.Session()
 AUTH_TOKEN = None
 
 # ==================== PREMIUM UI DESIGN ====================
-# মেইন বাটন ডিজাইন (নীল ব্লক ইমোজি ও বোল্ড টেক্সট)
 MAIN_BTN_TEXT = "🟦   𝗚𝗘𝗧 𝗙𝗔𝗖𝗘𝗕𝗢𝗢𝗞 𝗡𝗨𝗠𝗕𝗘𝗥   🟦"
 ADMIN_BTN_TEXT = "⚙️   𝗔𝗗𝗠𝗜𝗡 𝗖𝗢𝗡𝗧𝗥𝗢𝗟   ⚙️"
 
@@ -97,34 +99,33 @@ def welcome(message):
         markup.add(types.KeyboardButton(ADMIN_BTN_TEXT))
     
     welcome_body = (
-        f"<b>👋 𝗛𝗲𝗹𝗹𝗼 {message.from_user.first_name}!</b>\n\n"
-        "<b>𝗪𝗲𝗹𝗰𝗼𝗺𝗲 𝘁𝗼 𝗼𝘂𝗿 𝗣𝗿𝗲𝗺𝗶𝘂𝗺 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸 𝗦𝗠𝗦 𝗦𝗲𝗿𝘃𝗶𝗰𝗲.</b>\n"
-        "<b>𝗚𝗲𝘁 𝗵𝗶𝗴𝗵-𝗾𝘂𝗮𝗹𝗶𝘁𝘆 𝗻𝘂𝗺𝗯𝗲𝗿𝘀 𝗶𝗻𝘀𝘁𝗮𝗻𝘁𝗹𝘆.</b>"
+        f"👋 𝗛𝗲𝗹𝗹𝗼 {message.from_user.first_name}!\n\n"
+        "𝗪𝗲𝗹𝗰𝗼𝗺𝗲 𝘁𝗼 𝗼𝘂𝗿 𝗣𝗿𝗲𝗺𝗶𝘂𝗺 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸 𝗦𝗠𝗦 𝗦𝗲𝗿𝘃𝗶𝗰𝗲.\n"
+        "𝗚𝗲𝘁 𝗵𝗶𝗴𝗵-𝗾𝘂𝗮𝗹𝗶𝘁𝘆 𝗻𝘂𝗺𝗯𝗲𝗿𝘀 𝗶𝗻𝘀𝘁𝗮𝗻𝘁𝗹𝘆."
     )
-    bot.send_message(uid, premium_msg("𝗠𝗔𝗜𝗡 𝗠𝗘𝗡𝗨", welcome_text=welcome_body), reply_markup=markup)
+    # এখানে ভুল ছিল, সংশোধন করা হয়েছে
+    bot.send_message(uid, premium_msg("𝗠𝗔𝗜𝗡 𝗠𝗘𝗡𝗨", welcome_body), reply_markup=markup)
 
 @bot.message_handler(func=lambda m: True)
 def handle_text_commands(message):
     uid = message.chat.id
     text = message.text
 
-    # যদি ইউজার "GET NUMBER" বাটনে ক্লিক করে
     if "GET" in text.upper() and "NUMBER" in text.upper():
         bot.send_chat_action(uid, 'typing')
         bot.send_message(uid, "<b>🔎 𝗦𝗲𝗮𝗿𝗰𝗵𝗶𝗻𝗴 𝗟𝗶𝘃𝗲 𝗦𝘁𝗼𝗰𝗸... 𝗣𝗹𝗲𝗮𝘀𝗲 𝗪𝗮𝗶𝘁.</b>", parse_mode="HTML")
         
         ranges = get_live_facebook_ranges()
         if not ranges:
-            bot.send_message(uid, premium_msg("𝗡𝗢 𝗦𝗧𝗢𝗖Ｋ", "<b>⚠️ 𝗡𝗼 𝗹𝗶𝘃𝗲 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸 𝗿𝗮𝗻𝗴𝗲𝘀 𝗳𝗼𝘂𝗻𝗱 𝗶𝗻 𝘆𝗼𝘂𝗿 𝗽𝗮𝗻𝗲𝗹 𝗿𝗶𝗴𝗵𝘁 𝗻𝗼𝘄.</b>"))
+            bot.send_message(uid, premium_msg("𝗡𝗢 𝗦𝗧𝗢𝗖𝗞", "⚠️ 𝗡𝗼 𝗹𝗶𝘃𝗲 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸 𝗿𝗮𝗻𝗴𝗲𝘀 𝗳𝗼𝘂𝗻𝗱 𝗶𝗻 𝘆𝗼𝘂𝗿 𝗽𝗮𝗻𝗲𝗹 𝗿𝗶𝗴𝗵𝘁 𝗻𝗼𝘄."))
             return
 
         markup = types.InlineKeyboardMarkup(row_width=1)
         for country, rcode in ranges.items():
-            # ইনলাইন বাটন ডিজাইন
             btn_label = f"📘   {country.upper()}  ({rcode[:3]})   📘"
             markup.add(types.InlineKeyboardButton(btn_label, callback_data=f"buyfb_{rcode[:6]}_{country}"))
         
-        bot.send_message(uid, premium_msg("𝗦𝗘𝗟𝗘𝗖𝗧 𝗖𝗢𝗨𝗡𝗧𝗥𝗬", "<b>𝗖𝗵𝗼𝗼𝘀𝗲 𝗮 𝗹𝗶𝘃𝗲 𝗰𝗼𝘂𝗻𝘁𝗿𝘆 𝗳𝗿𝗼𝗺 𝗯𝗲𝗹𝗼𝘄:</b>"), reply_markup=markup)
+        bot.send_message(uid, premium_msg("𝗦𝗘𝗟𝗘𝗖𝗧 𝗖𝗢𝗨𝗡𝗧𝗥𝗬", "𝗖𝗵𝗼𝗼𝘀𝗲 𝗮 𝗹𝗶𝘃𝗲 𝗰𝗼𝘂𝗻𝘁𝗿𝘆 𝗳𝗿𝗼𝗺 𝗯𝗲𝗹𝗼𝘄:"), reply_markup=markup)
 
 @bot.callback_query_handler(func=lambda call: True)
 def handle_callbacks(call):
@@ -138,7 +139,7 @@ def handle_callbacks(call):
         headers = {"mauthtoken": token, "Content-Type": "application/json"}
         payload = {"range": f"{prefix}XXXX", "is_national": False, "remove_plus": False}
         
-        bot.edit_message_text(premium_msg("⏳ 𝗣𝗥𝗢𝗖𝗘𝗦𝗦𝗜𝗡𝗚", f"<b>𝗥𝗲𝗾𝘂𝗲𝘀𝘁𝗶𝗻𝗴 {country} 𝗻𝘂𝗺𝗯𝗲𝗿...</b>"), uid, call.message.message_id)
+        bot.edit_message_text(premium_msg("⏳ 𝗣𝗥𝗢𝗖𝗘𝗦𝗦𝗜𝗡𝗚", f"𝗥𝗲𝗾𝘂𝗲𝘀𝘁𝗶𝗻𝗴 {country} 𝗻𝘂𝗺𝗯𝗲𝗿..."), uid, call.message.message_id)
         
         try:
             resp = session.post(BUY_NUMBER_URL, json=payload, headers=headers, timeout=10)
@@ -146,7 +147,6 @@ def handle_callbacks(call):
             if res.get('meta', {}).get('status') == "success":
                 num = res['data']['full_number']
                 
-                # নাম্বার রিসিভ বাটন ডিজাইন
                 markup = types.InlineKeyboardMarkup(row_width=1)
                 markup.add(
                     types.InlineKeyboardButton("🔄   𝗖𝗛𝗔𝗡𝗚𝗘 𝗡𝗨𝗠𝗕𝗘𝗥", callback_data=f"buyfb_{prefix}_{country}"),
@@ -154,15 +154,15 @@ def handle_callbacks(call):
                 )
                 
                 res_body = (
-                    f"<b>✅ 𝗦𝗨𝗖𝗖𝗘𝗦𝗦𝗙𝗨𝗟𝗟𝗬 𝗥𝗘𝗖𝗘𝗜𝗩𝗘𝗗!</b>\n\n"
-                    f"<b>📞 𝗡𝘂𝗺𝗯𝗲𝗿:</b> <code>{num}</code>\n"
-                    f"<b>🌍 𝗖𝗼𝘂𝗻𝘁𝗿𝘆: {country}</b>\n\n"
-                    "<b>📌 𝗦𝘂𝗯𝗺𝗶𝘁 𝗼𝗻 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸 𝗮𝗻𝗱 𝘄𝗮𝗶𝘁 𝗳𝗼𝗿 𝗢𝗧𝗣.</b>"
+                    f"✅ 𝗦𝗨𝗖𝗖𝗘𝗦𝗦𝗙𝗨𝗟𝗟𝗬 𝗥𝗘𝗖𝗘𝗜𝗩𝗘𝗗!\n\n"
+                    f"📞 𝗡𝘂𝗺𝗯𝗲𝗿: <code>{num}</code>\n"
+                    f"🌍 𝗖𝗼𝘂𝗻𝘁𝗿𝘆: {country}\n\n"
+                    "📌 𝗦𝘂𝗯𝗺𝗶𝘁 𝗼𝗻 𝗙𝗮𝗰𝗲𝗯𝗼𝗼𝗸 𝗮𝗻𝗱 𝘄𝗮𝗶𝘁 𝗳𝗼𝗿 𝗢𝗧𝗣."
                 )
                 bot.edit_message_text(premium_msg("𝗡𝗨𝗠𝗕𝗘𝗥 𝗗𝗘𝗧𝗔𝗜𝗟𝗦", res_body), uid, call.message.message_id, reply_markup=markup)
             else:
-                bot.answer_callback_query(call.id, "❌ Stock Out for this range!", show_alert=True)
-                bot.edit_message_text(premium_msg("𝗦𝗧𝗢𝗖𝗞 𝗢𝗨𝗧", "<b>𝗧𝗵𝗶𝘀 𝗰𝗼𝘂𝗻𝘁𝗿𝘆 𝗶𝘀 𝗼𝘂𝘁 𝗼𝗳 𝘀𝘁𝗼𝗰𝗸. 𝗣𝗹𝗲𝗮𝘀𝗲 𝘁𝗿𝘆 𝗮𝗻𝗼𝘁𝗵𝗲𝗿.</b>"), uid, call.message.message_id)
+                bot.answer_callback_query(call.id, "❌ No stock for this range!", show_alert=True)
+                bot.edit_message_text(premium_msg("𝗦𝗧𝗢𝗖𝗞 𝗢𝗨𝗧", "𝗧𝗵𝗶𝘀 𝗰𝗼𝘂𝗻𝘁𝗿𝘆 𝗶𝘀 𝗼𝘂𝘁 𝗼𝗳 𝘀𝘁𝗼𝗰𝗸. 𝗣𝗹𝗲𝗮𝘀𝗲 𝘁𝗿𝘆 𝗮𝗻𝗼𝘁𝗵𝗲𝗿."), uid, call.message.message_id)
         except:
             bot.answer_callback_query(call.id, "❌ Connection Error!")
 
@@ -172,5 +172,9 @@ def handle_callbacks(call):
 # ==================== RUN BOT ====================
 if __name__ == "__main__":
     print("🚀 Premium Blue Facebook Bot is Starting...")
-    keep_alive()  # সার্ভার অনলাইনে রাখবে
-    bot.infinity_polling(timeout=10, long_polling_timeout=5)  # স্পিড বাড়াবে
+    keep_alive()
+    try:
+        bot.infinity_polling(timeout=20, long_polling_timeout=10)
+    except Exception as e:
+        print(f"Polling Error: {e}")
+        time.sleep(5)
