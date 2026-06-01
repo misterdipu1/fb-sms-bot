@@ -25,7 +25,7 @@ def keep_alive():
     t.start()
 
 # ==================== BOT CONFIGURATION ====================
-BOT_TOKEN = "8994561198:AAG2CspmFsjnp9erAx1EgbBXZYSTAH-_eaU"
+BOT_TOKEN = "8994561198:AAHsFieUnWHkL2HEtyNQhTThYHcInICFZ6E"
 ADMIN_ID = 6903748951
 GMAIL = "sojibsorkar388@gmail.com"
 PASSWORD = "Sojib098@#"
