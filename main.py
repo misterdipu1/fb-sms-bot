@@ -39,7 +39,7 @@ session = requests.Session()
 AUTH_TOKEN = None
 
 # UI DESIGN
-MAIN_BTN_TEXT = "🟦   𝗚𝗘𝗧 𝗙𝗔𝗖𝗘𝗕𝗢𝗢Ｋ 𝗡𝗨𝗠Ｂ𝗘𝗥   🟦"
+MAIN_BTN_TEXT = " 🎲 𝗚𝗘𝗧 𝗡𝗨𝗠𝗕𝗘𝗥  "
 ADMIN_BTN_TEXT = "⚙️   𝗔𝗗𝗠𝗜𝗡 𝗖𝗢𝗡𝗧𝗥𝗢𝗟"
 
 def get_auth_token():
